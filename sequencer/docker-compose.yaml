@@ -1,0 +1,52 @@
+version: "3.4"
+services:
+  op-node:
+    container_name: op-node
+    image: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:${OP_NODE_IMAGE_TAG}
+    restart: unless-stopped
+    stop_grace_period: 5m
+    entrypoint: /scripts/start-op-node.sh
+    env_file:
+      - .env
+    volumes:
+      - ./config:/chainconfig
+      - ./scripts/:/scripts
+    networks:
+      - op-network
+    ports:
+      - ${OP_NODE_P2P_PORT}:${OP_NODE_P2P_PORT}/udp
+      - ${OP_NODE_P2P_PORT}:${OP_NODE_P2P_PORT}/tcp
+      - ${OP_NODE_HTTP_PORT}:${OP_NODE_HTTP_PORT}
+
+  op-batcher:
+    container_name: op-batcher
+    image: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-batcher:${OP_BATCHER_IMAGE_TAG}
+    restart: unless-stopped
+    stop_grace_period: 5m
+    entrypoint: /scripts/start-op-batcher.sh
+    env_file:
+      - .env
+    volumes:
+      - ./scripts/start-op-batcher.sh:/scripts/start-op-batcher.sh
+    networks:
+      - op-network
+    ports:
+      - ${OP_BATHCER_HTTP_PORT}:${OP_BATHCER_HTTP_PORT}
+
+  op-proposer:
+    container_name: op-proposer
+    image: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-proposer:${OP_PROPOSER_IMAGE_TAG}
+    restart: unless-stopped
+    stop_grace_period: 5m
+    entrypoint: /scripts/start-op-proposer.sh
+    env_file:
+      - .env
+    volumes:
+      - ./scripts/start-op-proposer.sh:/scripts/start-op-proposer.sh
+    networks:
+      - op-network
+    ports:
+      - ${OP_PROPOSER_HTTP_PORT}:${OP_PROPOSER_HTTP_PORT}
+
+networks:
+  op-network:
