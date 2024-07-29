@@ -1,5 +1,24 @@
 version: "3.4"
 services:
+  op-geth:
+    container_name: op-geth
+    image: https://us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:${OP_GETH_IMAGE_TAG}
+    restart: unless-stopped
+    stop_grace_period: 5m
+    entrypoint: /scripts/start-op-geth.sh
+    env_file:
+      - .env
+    volumes:
+      - ./config:/chainconfig
+      - ./scripts/start-op-geth.sh:/scripts/start-op-geth.sh
+    networks:
+      - op-network
+    ports:
+      - ${OP_GETH_HTTP_PORT}:${OP_GETH_HTTP_PORT}
+      - ${OP_GETH_WS_PORT}:${OP_GETH_WS_PORT}
+      - ${OP_GETH_AUTH_RPC_PORT}:${OP_GETH_AUTH_RPC_PORT}
+      - ${OP_GETH_P2P_PORT}:${OP_GETH_P2P_PORT}
+
   op-node:
     container_name: op-node
     image: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:${OP_NODE_IMAGE_TAG}
@@ -10,7 +29,7 @@ services:
       - .env
     volumes:
       - ./config:/chainconfig
-      - ./scripts/:/scripts
+      - ./scripts/start-op-node.sh:/scripts/start-op-node.sh
     networks:
       - op-network
     ports:
