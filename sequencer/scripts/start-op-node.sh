@@ -16,6 +16,5 @@ exec op-node \
   --rpc.enable-admin \
   --p2p.sequencer.key=$GS_SEQUENCER_PRIVATE_KEY \
   --l1=$L1_RPC_URL \
-  --l1.beacon=$L1_BEACON_URL \
   --l1.rpckind=$L1_RPC_KIND
   $EXTENDED_ARG_OP_NODE $@
