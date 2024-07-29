@@ -2,7 +2,7 @@ version: "3.4"
 services:
   op-geth:
     container_name: op-geth
-    image: https://us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:${OP_GETH_IMAGE_TAG}
+    image: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:${OP_GETH_IMAGE_TAG}
     restart: unless-stopped
     stop_grace_period: 5m
     entrypoint: /scripts/start-op-geth.sh

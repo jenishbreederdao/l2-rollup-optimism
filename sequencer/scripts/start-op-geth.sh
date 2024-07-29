@@ -1,10 +1,12 @@
 #!/bin/sh
 set -eou
 
-#!/bin/bash
+if [ -n "${INITIALIZE_GENESIS}" ]; then
+  geth init --datadir="$DATADIR" /chainconfig/genesis.json
+fi
 
-exec op-geth \
-  --datadir ./datadir \
+exec geth \
+  --datadir $DATADIR \
   --http \
   --http.corsdomain="*" \
   --http.vhosts="*" \
